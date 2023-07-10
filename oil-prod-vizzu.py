@@ -18,6 +18,7 @@ import numpy as np
 df = pd.read_csv('oil-production-with-region.csv')
 df.head()
 
+df_p = pd.read_csv('oil_production_pie_chart.csv')
 
 # In[5]:
 
@@ -85,14 +86,74 @@ style = vz.Style(
 
             },
         },
-        "legend": {"width": 10}
+        "legend": {"width": 10},
+        "logo": {
+            "paddingBottom": "160.500000%",
+            "width": "8.186307em"
+        }
     }
 )
+
+
+config_pie = {
+    "channels": {
+        "x": {"set": ["Entity", "value"]},
+        "y": {"range": {"min": "0%"}},
+        "label": {"set": ["Entity", "value"]},
+        "color": {"set": ["Entity"]},
+    },
+    "sort": "byValue",
+    "coordSystem": "polar"
+}
+
+#colors, labels, padding
+
+color_list_pie = ["#abababFF", "#ff4549FF",  "#3562b6FF", "#1c9761FF"]
+
+
+
+
+style_pie = vz.Style(
+    {
+        "plot": {
+            #"paddingLeft": 200,
+            "paddingTop": 25,
+            "yAxis": {
+                "color": "#ffffff00",
+                "label": {"paddingRight": 10},
+
+            },
+            "xAxis": {
+                "title": {"color": "#ffffff00"},
+                "label": {
+                    "color": "#ffffff00",
+                    "numberFormat": "grouped",
+                },
+            },
+            "marker": {
+                "colorPalette": " ".join(color_list_pie)
+            },
+            "backgroundColor": "#121212FF"
+        },
+        "title": {
+            "backgroundColor" : "#121212FF",
+            "color": "#eaeaf2ff",
+            "fontFamily": "Lucida Handwriting",#"comic-sans-ms,cursive",#"Papyrus"#
+            "fontSize": "3.000000em"
+        },
+        "logo": {
+            "paddingBottom": "160.500000%",
+            "width": "8.186307em"
+        }
+    }
+)
+
+
 
 st.title("Oil Production over the years")
 
 text_1 = "Click on the button to launch the Bar Chart showing the evolution of the oil production for each country"
-text_2 = "\nPie Chart will show the proportions of Oil the Production"
+text_2 = "Pie Chart will show the proportions of the oil production"
 
 st.info(text_1)
 st.info(text_2)
@@ -117,7 +178,7 @@ if launch_bar:
     chart.animate(data, style)
     
     
-    for year in range(1944, 2021):
+    for year in range(1901, 2021):
         config['title'] = f"Oil Production in {year}"
         
         chart.animate(
@@ -129,8 +190,8 @@ if launch_bar:
             title={"duration":0, "delay": 0}
         )
 
-    html(chart._repr_html_(), width=1080, height=720)
-    launch = False
+    html(chart._repr_html_(), width=960, height=480)
+    launch_bar = False
 
 launch_pie = False
 
@@ -139,12 +200,12 @@ if button_2:
 
 if launch_pie:
     data = vz.Data()
-    data.add_data_frame()
+    data.add_data_frame(df_p)
 
     chart = vz.Chart(display=vz.DisplayTarget.MANUAL)
     chart.animate(data, style_pie)
 
-    for year in range(1944, 2021):
+    for year in range(1901, 2021):
         config['title'] = f"Oil Production Share in {year}"
 
         chart.animate(
@@ -155,5 +216,5 @@ if launch_pie:
             y={"delay":0},
             title={"duration":0, "delay": 0}
         )
-    html(chart._repr_html_(), width=1080, height=720)
+    html(chart._repr_html_(), width=960, height=480)
     launch_pie = False
