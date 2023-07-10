@@ -206,7 +206,7 @@ if launch_pie:
     chart.animate(data, style_pie)
 
     for year in range(1901, 2021):
-        config['title'] = f"Oil Production Share in {year}"
+        config_pie['title'] = f"Oil Production Share in {year}"
 
         chart.animate(
             vz.Data.filter(f"parseInt(record.{graph_time_col}) == {year}"),
