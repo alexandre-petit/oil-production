@@ -1,0 +1,3 @@
+ipyvizzu==0.14.0
+streamlit==1.8.1
+protobuf==3.19.4
